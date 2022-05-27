@@ -17,8 +17,8 @@ code {
 }
 
 .page-content {
-  width: 100vw;
-  height: 100vh;
+  max-width: 100vw;
+  min-height: 100vh;
   background-color: rgb(75, 76, 81);
 }
 
@@ -31,6 +31,7 @@ code {
 .page-main {
   background-color: rgb(100, 100, 100);
   margin-top: 10px;
+  padding-bottom: 10px;
   border-radius: 7px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -38,4 +39,16 @@ code {
 
 .page-imput-task {
   padding: 20px 15px;
+}
+
+.page-show-task {
+  margin: 10px 15px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.task-title {
+  font-weight: bold;
+  font-size: larger;
 }
