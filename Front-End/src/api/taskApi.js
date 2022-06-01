@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:5000/";
 
-export const getAllTask = () => {
+export const getAllTaskApi = () => {
   try {
     const data = axios.get(baseUrl);
     return data;
@@ -11,7 +11,7 @@ export const getAllTask = () => {
   }
 };
 
-export const getOneTask = (id) => {
+export const getOneTaskApi = (id) => {
   try {
     const data = axios.get(`${baseUrl}/${id}`);
     return data;
@@ -20,7 +20,7 @@ export const getOneTask = (id) => {
   }
 };
 
-export const createTask = (task) => {
+export const createTaskApi = (task) => {
   try {
     axios.post(baseUrl, task);
   } catch (error) {
@@ -28,7 +28,7 @@ export const createTask = (task) => {
   }
 };
 
-export const updateTask = (id, task) => {
+export const updateTaskApi = (id, task) => {
   try {
     axios.patch(`${baseUrl}/${id}`, task);
   } catch (error) {
@@ -36,7 +36,7 @@ export const updateTask = (id, task) => {
   }
 };
 
-export const deleteTask = (id) => {
+export const deleteTaskApi = (id) => {
   try {
     axios.delete(`${baseUrl}/${id}`);
   } catch (error) {
