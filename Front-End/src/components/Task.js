@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { deleteTaskApi } from "../api/taskApi";
 import { Button } from "react-bootstrap";
-const Task = ({ title, description, colorNumber }) => {
+const Task = ({ title, description, colorNumber, taskId }) => {
   const colors = [
     { bg: "text-bg-success", btn: "dark" },
     { bg: "text-bg-danger", btn: "dark" },
@@ -9,13 +11,22 @@ const Task = ({ title, description, colorNumber }) => {
     { bg: "text-bg-light", btn: "success" },
     { bg: "text-bg-primary", btn: "danger" },
   ];
+
   const [btnColor, setBtnColor] = useState(colors[colorNumber].btn);
   const cardRef = useRef(null);
+  const navigate = useNavigate();
+
+  const deleteTask = (id) => {
+    console.log(id);
+    deleteTaskApi(id);
+    navigate(0);
+  };
   return (
     <>
       <aside
         className={`card text-center mb-2 mt-2 ${colors[colorNumber].bg}`}
         ref={cardRef}
+        id={taskId}
       >
         <div className="card-header task-title">{title}</div>
         <div className="card-body">
@@ -26,14 +37,18 @@ const Task = ({ title, description, colorNumber }) => {
             onClick={() => {
               cardRef.current.classList.replace(
                 colors[colorNumber].bg,
-                colors[1].bg
+                colors[0].bg
               );
               setBtnColor("dark");
             }}
           >
             Completed
           </Button>
-          <Button variant={btnColor} className="ms-2 me-2">
+          <Button
+            variant={btnColor}
+            className="ms-2 me-2"
+            onClick={() => deleteTask(taskId)}
+          >
             Delete
           </Button>
           <Button variant={btnColor}>Edit</Button>
@@ -43,11 +58,5 @@ const Task = ({ title, description, colorNumber }) => {
     </>
   );
 };
-
-// console.log(
-//   document
-//     .getElementsByTagName("aside")[1]
-//     .classList.contains("text-bg-warning")
-// );
 
 export default Task;
