@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import Task from "../components/Task";
-import { getAllTask } from "../api/taskApi";
+import { getAllTaskApi } from "../api/taskApi";
 import CreateTask from "./CreateTask";
 
 const HomePage = () => {
   const [taskData, setTaskData] = useState([]);
   useEffect(() => {
-    getAllTask().then((data) => setTaskData(data.data.tasks));
+    getAllTaskApi().then((data) => setTaskData(data.data.tasks.reverse()));
   }, []);
   return (
     <main className="container page-main">
