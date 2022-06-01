@@ -20,6 +20,7 @@ const HomePage = () => {
             title={task.title}
             description={task.description}
             colorNumber={task.colorNumber}
+            taskId={task._id}
             key={uuidv4()}
           />
         ))}
