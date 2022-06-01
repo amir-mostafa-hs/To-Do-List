@@ -1,19 +1,19 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:5000/";
+const baseUrl = "http://localhost:5000";
 
-export const getAllTaskApi = () => {
+export const getAllTaskApi = async () => {
   try {
-    const data = axios.get(baseUrl);
+    const data = await axios.get(baseUrl);
     return data;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const getOneTaskApi = (id) => {
+export const getOneTaskApi = async (id) => {
   try {
-    const data = axios.get(`${baseUrl}/${id}`);
+    const data = await axios.get(`${baseUrl}/${id}`);
     return data;
   } catch (error) {
     console.error(error);
