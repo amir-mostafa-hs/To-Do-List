@@ -1,57 +1,82 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { InputGroup, Form, FormControl, Button, Alert } from "react-bootstrap";
+import { createTaskApi } from "../api/taskApi";
+
 const CreateTask = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [colour, setColour] = useState("Choose colour - default is random");
-  const [show, setShow] = useState(true);
+  const [taskContent, setTaskContent] = useState({
+    title: "",
+    description: "",
+    colorNumber: "Choose colour",
+  });
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const submitTask = () => {
-    if (!title || !description) {
+    if (
+      !taskContent.title ||
+      !taskContent.description ||
+      taskContent.colorNumber === "Choose colour"
+    ) {
       setShow(true);
       setTimeout(() => setShow(false), 5000);
     } else {
-      setShow(false);
+      createTaskApi(taskContent);
+      setTaskContent({
+        title: "",
+        description: "",
+        colorNumber: "Choose colour",
+      });
+      navigate(0);
     }
   };
 
   const EmptyAlert = () => {
     if (show) {
       return (
-        <aside className="notification">
-          <Alert
-            variant="danger"
-            onClose={() => setShow(false)}
-            dismissible
-            className="notification-alert"
-          >
-            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-            <p>
-              The description or title field or both is empty. Please enter a
-              title and description
-            </p>
-          </Alert>
-        </aside>
+        <Alert
+          variant="danger"
+          onClose={() => setShow(false)}
+          dismissible
+          className="mt-2"
+        >
+          <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          <p>
+            The description field or title or color or all three is blank.
+            Please enter title, description and color
+          </p>
+        </Alert>
       );
     }
   };
   return (
     <aside>
-      <EmptyAlert />
       <InputGroup>
         <FormControl
           placeholder="Task title ..."
-          onChange={(e) => setTitle(e.target.value)}
+          value={taskContent.title}
+          onChange={(e) =>
+            setTaskContent({ ...taskContent, title: e.target.value })
+          }
         />
         <Form.Select
           className="page-imput-task-colour"
-          onChange={(e) => setColour(e.target.value)}
+          value={taskContent.colorNumber}
+          onChange={(e) => {
+            if (e.target.value === "random") {
+              const randomColur = Math.floor(Math.random() * 4) + 2;
+              setTaskContent({ ...taskContent, colorNumber: randomColur });
+            } else {
+              setTaskContent({ ...taskContent, colorNumber: e.target.value });
+            }
+          }}
         >
-          <option>Choose colour - default is random</option>
-          <option>Yellow</option>
-          <option>Cyan</option>
-          <option>Light</option>
-          <option>Blue</option>
+          <option>Choose colour</option>
+          <option value={"random"}>Random</option>
+          <option value={2}>Yellow</option>
+          <option value={3}>Cyan</option>
+          <option value={4}>Light</option>
+          <option value={5}>Blue</option>
         </Form.Select>
         <Button variant="outline-warning" onClick={submitTask}>
           Button
@@ -62,9 +87,13 @@ const CreateTask = () => {
         <FormControl
           as="textarea"
           aria-label="With textarea"
-          onChange={(e) => setDescription(e.target.value)}
+          value={taskContent.description}
+          onChange={(e) =>
+            setTaskContent({ ...taskContent, description: e.target.value })
+          }
         />
       </InputGroup>
+      <EmptyAlert />
     </aside>
   );
 };
