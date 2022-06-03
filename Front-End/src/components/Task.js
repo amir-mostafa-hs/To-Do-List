@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteTaskApi } from "../api/taskApi";
 import { Button } from "react-bootstrap";
+import CreateTask from "./CreateTask";
+
 const Task = ({ title, description, colorNumber, taskId }) => {
   const colors = [
     { bg: "text-bg-success", btn: "dark" },
@@ -13,6 +15,7 @@ const Task = ({ title, description, colorNumber, taskId }) => {
   ];
 
   const [btnColor, setBtnColor] = useState(colors[colorNumber].btn);
+  const [editState, setEditState] = useState(false);
   const cardRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,6 +24,7 @@ const Task = ({ title, description, colorNumber, taskId }) => {
     deleteTaskApi(id);
     navigate(0);
   };
+
   return (
     <>
       <aside
@@ -51,9 +55,18 @@ const Task = ({ title, description, colorNumber, taskId }) => {
           >
             Delete
           </Button>
-          <Button variant={btnColor}>Edit</Button>
+          <Button variant={btnColor} onClick={() => setEditState(true)}>
+            Edit
+          </Button>
         </div>
-        <div className="card-footer"></div>
+        <div className="card-footer">
+          {editState && (
+            <CreateTask
+              callFor="edit"
+              taskData={{ title, description, colorNumber, taskId }}
+            />
+          )}
+        </div>
       </aside>
     </>
   );
