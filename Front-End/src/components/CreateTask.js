@@ -1,33 +1,51 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputGroup, Form, FormControl, Button, Alert } from "react-bootstrap";
-import { createTaskApi } from "../api/taskApi";
+import { createTaskApi, updateTaskApi } from "../api/taskApi";
 
-const CreateTask = () => {
-  const [taskContent, setTaskContent] = useState({
+const CreateTask = ({
+  callFor = "create",
+  taskData = {
     title: "",
     description: "",
     colorNumber: "Choose colour",
-  });
+  },
+}) => {
+  const [taskContent, setTaskContent] = useState(taskData);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const submitTask = () => {
-    if (
-      !taskContent.title ||
-      !taskContent.description ||
-      taskContent.colorNumber === "Choose colour"
-    ) {
-      setShow(true);
-      setTimeout(() => setShow(false), 5000);
+    if (callFor === "create") {
+      if (
+        !taskContent.title ||
+        !taskContent.description ||
+        taskContent.colorNumber === "Choose colour"
+      ) {
+        setShow(true);
+        setTimeout(() => setShow(false), 5000);
+      } else {
+        createTaskApi(taskContent);
+        setTaskContent({
+          title: "",
+          description: "",
+          colorNumber: "Choose colour",
+        });
+        navigate(0);
+      }
     } else {
-      createTaskApi(taskContent);
-      setTaskContent({
-        title: "",
-        description: "",
-        colorNumber: "Choose colour",
-      });
-      navigate(0);
+      if (
+        !taskContent.title ||
+        !taskContent.description ||
+        taskContent.colorNumber === "Choose colour"
+      ) {
+        setShow(true);
+        setTimeout(() => setShow(false), 5000);
+      } else {
+        const { taskId } = taskData;
+        updateTaskApi(taskId, taskContent);
+        navigate(0);
+      }
     }
   };
 
@@ -78,8 +96,11 @@ const CreateTask = () => {
           <option value={4}>Light</option>
           <option value={5}>Blue</option>
         </Form.Select>
-        <Button variant="outline-warning" onClick={submitTask}>
-          Button
+        <Button
+          variant={callFor === "create" ? "outline-warning" : "secondary"}
+          onClick={submitTask}
+        >
+          Submit
         </Button>
       </InputGroup>
       <InputGroup className="mt-2">
